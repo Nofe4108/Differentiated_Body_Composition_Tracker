@@ -5,7 +5,7 @@ The Differentiated Body Composition Tracker (DBCT) is a post-processing code wri
 
 ### Parameters
 
-The DBCT allows users to change 4 parameters: core_density, mantle_density, min_ejecta_core_frac, and max_ejecta_core_frac. The first two parameters represent the densities of the core and mantle material that compose the objects in a simulation. They have default values of 7874.0 kg/m^3 and 3000.0 kg/m^3 respectively. Changing these parameters changes the size of an object's core, which affects the resulting transfer of material during a disruptive collision. The last two parameters represent the minimum and maximum fraction of core material that can be in the ejecta from a collision. These parameters will change how much core and mantle material can be transferred during a disruptive collision. Please visity Ferich et al. (in prep) for more details on how these four parameters can affect the results from the DBCT.
+The DBCT allows users to change 4 parameters: core_density, mantle_density, min_ejecta_core_frac, and max_ejecta_core_frac. The first two parameters represent the densities of the core and mantle material that compose the objects in a simulation. They have default values of 7874.0 kg/m<sup>3</sup> and 3000.0 kg/m<sup>3</sup> respectively. Changing these parameters changes the size of an object's core, which affects the resulting transfer of material during a disruptive collision. The last two parameters represent the minimum and maximum fraction of core material that can be in the ejecta from a collision. These parameters will change how much core and mantle material can be transferred during a disruptive collision. Please visit Ferich et al. (in prep) for more details on how these four parameters can affect the results from the DBCT.
 
 ### Input Files
 
@@ -17,10 +17,10 @@ The DBCT requires three different input files: an initial composition file, a co
 
 - The ejection file should contain the time of ejection and hashes of the objects that were ejected. The ejection file should be produced during the course of a REBOUND simulation but is not automatically produced by the REBOUND module. Users need to determine what constitutes an ejection in their simulation and create the code to produce the file containing objects that meet these conditions. extras.txt contains code that demonstrates one way of producing this file. It's also possible to simply remove the ejection feature from the DBCT by removing all instances of the ejection file and any variables or code that use its data. 
 
-Examples of all three of these files can be found in the DBCT_input folder. These example files were created from a 10 Myr-long REBOUND simulation of a disk containing 26 Mars-sized and 260 moon-sized objects around a Sun-like star. All objects start with a uniform CMF of 0.3 and have nearly circular obits with semi-major axes that range from 0.35 AU to 4.0 AU. 
+Examples of all three of these files can be found in the [DBCT_input](DBCT_input/) folder. These example files were created from a 10 Myr-long REBOUND simulation of a disk containing 26 Mars-sized and 260 moon-sized objects around a Sun-like star. All objects start with a uniform CMF of 0.3 and have nearly circular obits with semi-major axes that range from 0.35 AU to 4.0 AU. 
 
 ### Output Files
 
-The DBCT returns a single file containing the hashes, masses, and CMFs of all objects that remain at the end of the simulation. An example of this file can be found in the DBCT_output folder. 
+The DBCT returns a single file containing the hashes, masses, and CMFs of all objects that remain at the end of the simulation. An example of this file can be found in the [DBCT_output](DBCT_output/) folder. 
 
 For questions, comments, or bugs please email fericn1@unlv.nevada.edu
