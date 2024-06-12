@@ -1,0 +1,46 @@
+*** MODIFYING THE FRAGMENTATION MODULE ***
+
+The DBCT requires the fragmentation module to produce a collision report that includes the following parameters for every collision: collision time, collision type, impact parameter, target hash, target mass, target radius, projectile hash, projectile radius, and the hashes and masses of any fragments that are produced during the collision. Currently, the fragmentation module does not include the impact parameter, target radius, and projectile radius in collision reports. Therefore, when preparing REBOUND simulations to collect collisional data for the DBCT, please change lines 321-334 in the fragmentation module to the following:
+
+void print_collision_array(struct reb_simulation* const r, struct reb_collision c, struct collision_params *params, double target_r, double projectile_r){
+//0=elastic bounce, 1=merger, 2=partial accretion, 3=partial erosion, 4=supercat
+    FILE* of = fopen(collision_report.txt","a+");
+    fprintf(of, "%e\t", r->t);
+    fprintf(of, "%d\t", params->collision_type);
+    fprintf(of, "%e\t", params->b);
+    fprintf(of, "%u\t", (r->particles[params->target].hash));
+    fprintf(of, "%e\t", (r->particles[params->target].m));
+    fprintf(of, "%e\t", target_r);
+    fprintf(of, "%u\t", (r->particles[params->projectile].hash));
+    fprintf(of, "%e\t", projectile_r);
+    for(int i=(r->N - params->no_frags);i<r->N;i++){        //assuming Fragments are added to end of particle array
+        fprintf(of, "%u\t", (r->particles[i].hash));
+        fprintf(of, "%e\t", (r->particles[i].m));
+    }
+    fprintf(of, "\n");
+    fclose(of);                        // close file
+
+*** PRODUCING AN EJECTION FILE ***
+
+The following snippet of code shows one way to keep track of ejected particles during a REBOUND simulation using the C heartbeat function. Every 100 years of simulation time, the heartbeat checks to see if any objects have a semi-major axis that exceeds 100 AU. If a particle meeets this condition, then its removed from the simulation and its hash and time of ejection are recorded.
+
+void heartbeat(struct reb_simulation* sim){
+    if (reb_simulation_output_check(sim, 100)){   //heartbeat is at every 100 years
+        reb_simulation_output_timing(sim, 0);
+        printf("Walltime(s) = %f \n", sim->walltime);
+        for (int i=0;i<sim->N;i++){
+            struct reb_orbit o =  reb_orbit_from_particle(sim->G, sim->particles[i], sim->particles[0]);
+            if (o.a > 100.){
+                int keepSorted = 1;
+                int removed_hash = sim->particles[i].hash;
+                reb_simulation_remove_particle_by_hash(sim, removed_hash, keepSorted);
+                printf("PARTICLE REMOVED: semi-major axis grew bigger than 100 au\n");
+                printf("particle hash:     %u\n", removed_hash);
+                FILE* of_ejec = fopen(ejections.txt","a+");
+                fprintf(of_ejec, "%e\t", sim->t);
+                fprintf(of_ejec, "%u\n", removed_hash);
+                fclose(of_ejec);
+        }
+        }
+        }
+}
