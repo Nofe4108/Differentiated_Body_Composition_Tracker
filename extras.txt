@@ -1,6 +1,8 @@
 *** MODIFYING THE FRAGMENTATION MODULE ***
 
-The DBCT requires the fragmentation module to produce a collision report that includes the following parameters for every collision: collision time, collision type, impact parameter, target hash, target mass, target radius, projectile hash, projectile radius, and the hashes and masses of any fragments that are produced during the collision. 
+The DBCT requires the fragmentation module to produce a collision report that includes the following parameters for every collision: 
+collision time, collision type, impact parameter, target hash, target mass, target radius, projectile hash, 
+projectile radius, and the hashes and masses of any fragments that are produced during the collision. 
 Currently, the fragmentation module does not include the impact parameter, target radius, and projectile radius in collision reports. 
 Therefore, when preparing REBOUND simulations to collect collisional data for the DBCT, please change lines 321-334 in the fragmentation module to the following:
 
